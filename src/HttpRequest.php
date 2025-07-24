@@ -36,6 +36,7 @@ class HttpRequest
 
         $response = match (strtoupper($method)) {
             'GET' => $request->get($path, $data),
+            'PUT' => $request->put($path, $data),
             default => $request->post($path, $data),
         };
 

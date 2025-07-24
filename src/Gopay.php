@@ -3,10 +3,11 @@
 namespace BlissJaspis\Midtrans;
 
 use BlissJaspis\Midtrans\Traits\Base;
+use BlissJaspis\Midtrans\Traits\HasSubscription;
 
 class Gopay
 {
-    use Base;
+    use Base, HasSubscription;
 
     public function createPayAccount(array $params)
     {

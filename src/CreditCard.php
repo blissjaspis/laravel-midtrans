@@ -3,11 +3,12 @@
 namespace BlissJaspis\Midtrans;
 
 use BlissJaspis\Midtrans\Traits\Base;
+use BlissJaspis\Midtrans\Traits\HasSubscription;
 use BlissJaspis\Midtrans\HttpRequest;
 
 class CreditCard
 {
-    use Base;
+    use Base, HasSubscription;
     
     public function getPointInquiry(string $accountId)
     {
