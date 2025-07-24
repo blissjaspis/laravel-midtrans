@@ -30,7 +30,9 @@ class HttpRequest
             ->withBasicAuth($this->serverKey, '')
             ->withHeaders($this->headers)
             ->timeout(10)
-            ->connectTimeout(10);
+            ->connectTimeout(10)
+            ->withToken(base64_encode($this->serverKey . ':'), 'Basic');
+
 
         $response = match (strtoupper($method)) {
             'GET' => $request->get($path, $data),
