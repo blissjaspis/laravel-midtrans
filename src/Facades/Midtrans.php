@@ -5,12 +5,14 @@ namespace BlissJaspis\Midtrans\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static array getSnapToken(array $params)
- * @method static array getSnapRedirectUrl(array $params)
- * @method static array getTransactionStatus(string $transactionId)
- * @method static array getTransactionDetail(string $transactionId)
- * @method static array getTransactionList(array $params)
- * @method static array getTransactionNotification(string $transactionId)
+ * @method static array getToken(array $params)
+ * @method static array chargeTransaction(array $params)
+ * @method static array captureTransaction(array $params)
+ * @method static array expireTransaction(string $transactionIdOrOrderId)
+ * @method static array getTransactionStatus(string $transactionIdOrOrderId)
+ * @method static array getTransactionStatusB2B(string $transactionIdOrOrderId)
+ * @method static \BlissJaspis\Midtrans\CreditCard creditCard()
+ * @method static \BlissJaspis\Midtrans\Gopay gopay()
  * 
  * @see \BlissJaspis\Midtrans\Midtrans
  */
