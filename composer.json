@@ -1,0 +1,71 @@
+{
+    "name": "blissjaspis/laravel-midtrans",
+    "description": "Laravel Midtrans",
+    "type": "library",
+    "version": "1.0.0",
+    "require": {
+        "guzzlehttp/guzzle": "^7.9",
+        "illuminate/console": "^10.0 | ^11.0 | ^12.0",
+        "illuminate/support": "^10.0 | ^11.0 | ^12.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.24",
+        "orchestra/testbench": "^10.4",
+        "phpunit/phpunit": "^12.2"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "BlissJaspis\\Midtrans\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Workbench\\App\\": "workbench/app/",
+            "BlissJaspis\\Midtrans\\Tests\\": "tests/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "analyze": "vendor/bin/phpstan analyse",
+        "test": "@php vendor/bin/phpunit",
+        "format": "vendor/bin/pint",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
+        ],
+        "lint": [
+            "@php vendor/bin/pint --ansi"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Bliss Jaspis",
+            "email": "jaspis_zzt@ymail.com"
+        }
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "BlissJaspis\\Midtrans\\Providers\\MidtransServiceProvider"
+            ],
+            "aliases": {
+                "Midtrans": "BlissJaspis\\Midtrans\\Facades\\Midtrans"
+            }
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
