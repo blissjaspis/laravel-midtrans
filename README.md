@@ -25,7 +25,8 @@ Add the following to your `.env` file:
 
 ```env
 MIDTRANS_SERVER_KEY=your-api-key
-MIDTRANS_BASE_URL=https://api.sandbox.midtrans.com
+MIDTRANS_CLIENT_KEY=your-client-key
+MIDTRANS_IS_PRODUCTION=false
 ```
 
 ## Usage
@@ -50,6 +51,8 @@ class YourController
 
 ### Available Methods
 
+#### Midtrans
+
 - `getToken(array $params)`
 - `chargeTransaction(array $params)`
 - `captureTransaction(array $params)`
@@ -58,6 +61,33 @@ class YourController
 - `getTransactionStatusB2B(string $transactionIdOrOrderId)`
 - `creditCard()`
 - `gopay()`
+
+#### Credit Card
+- `registerCard(array $params)`
+- `getPointInquiry(string $cardToken)`
+- `getBankIdentificationNumber(string $binNumber)`
+- `cancelTransaction(string $transactionIdOrOrderId)`
+- `refundTransaction(string $transactionIdOrOrderId, array $params)`
+- `directRefundTransaction(string $transactionIdOrOrderId, array $params)`
+- `createSubscription(array $params)`
+- `getSubscription(string $subscriptionId)`
+- `disableSubscription(string $subscriptionId)`
+- `enableSubscription(string $subscriptionId)`
+- `updateSubscription(string $subscriptionId, array $params)`
+
+#### Gopay
+- `createPayAccount(array $params)`
+- `getAccountLinkedStatus(string $accountId)`
+- `unbindAccount(string $accountId)`
+- `cancelTransaction(string $transactionIdOrOrderId)`
+- `refundTransaction(string $transactionIdOrOrderId, array $params)`
+- `directRefundTransaction(string $transactionIdOrOrderId, array $params)`
+- `createSubscription(array $params)`
+- `getSubscription(string $subscriptionId)`
+- `disableSubscription(string $subscriptionId)`
+- `enableSubscription(string $subscriptionId)`
+- `updateSubscription(string $subscriptionId, array $params)`
+
 
 ### **API Reference**
 > For more detailed information about the API endpoints, parameters, and response structures, please refer to the official [Midtrans API Documentation](https://midtrans.com/en/documentation).
