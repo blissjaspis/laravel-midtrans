@@ -2,6 +2,8 @@
 
 namespace BlissJaspis\Midtrans;
 
+use BlissJaspis\Midtrans\Translator\TransactionStatus;
+
 class Midtrans
 {
     public function chargeTransaction(array $params)
@@ -32,6 +34,11 @@ class Midtrans
         return HttpRequest::sendRequest('GET', '/' . $transactionIdOrOrderId . '/status/b2b');
     }
 
+    public function translateTransactionStatus(string $status)
+    {
+        return (new TransactionStatus())->translate($status);
+    }
+    
     public function creditCard()
     {
         return new CreditCard();

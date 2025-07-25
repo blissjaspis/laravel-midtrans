@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static array expireTransaction(string $transactionIdOrOrderId)
  * @method static array getTransactionStatus(string $transactionIdOrOrderId)
  * @method static array getTransactionStatusB2B(string $transactionIdOrOrderId)
+ * @method static array translateTransactionStatus(string $status)
  * @method static \BlissJaspis\Midtrans\CreditCard creditCard()
  * @method static \BlissJaspis\Midtrans\Gopay gopay()
  * 
