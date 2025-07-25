@@ -42,9 +42,52 @@ class YourController
 
     public function getToken()
     {
-        $token = Midtrans::getToken();
+        $token = Midtrans::creditCard()->getToken([
+            'card_number' => '4355084355084358',
+            'card_exp_month' => '07',
+            'card_exp_year' => '2025',
+            'card_cvv' => '123',
+            'client_key' => config('midtrans.client_key'),
+            'token_id' => '1234567890',
+        ]);
 
         return $token;
+    }
+
+    public function chargeQRIS()
+    {
+        $charge = Midtrans::chargeTransaction([
+            'payment_type' => 'qris',
+            'transaction_details' => [
+                'order_id' => '1234567890',
+                'gross_amount' => 10000,
+            ],
+            'item_details' => [
+                [
+                    'id' => '1234567890',
+                    'price' => 10000,
+                    'quantity' => 1,
+                ]
+            ],
+            'customer_details' => [
+                'first_name' => 'John',
+                'last_name' => 'Doe',
+                'email' => 'john.doe@example.com',
+                'phone' => '081234567890',
+            ],
+            'qris': [
+                'acquirer' => 'gopay'
+            ]
+        ]);
+    }
+
+    public function refundTransaction()
+    {
+        $refund = Midtrans::gopay()->refundTransaction('1234567890', [
+            'amount' => 10000,
+            'refund_key' => '1234567890',
+            'reason' => 'test',
+        ]);
     }
 }
 ```
@@ -53,7 +96,6 @@ class YourController
 
 #### Midtrans
 
-- `getToken(array $params)`
 - `chargeTransaction(array $params)`
 - `captureTransaction(array $params)`
 - `expireTransaction(string $transactionIdOrOrderId)`
@@ -63,6 +105,7 @@ class YourController
 - `gopay()`
 
 #### Credit Card
+- `getToken(array $params)`
 - `registerCard(array $params)`
 - `getPointInquiry(string $cardToken)`
 - `getBankIdentificationNumber(string $binNumber)`
