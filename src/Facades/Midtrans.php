@@ -5,6 +5,9 @@ namespace BlissJaspis\Midtrans\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
+ * @method static array cancelTransaction(string $transactionIdOrOrderId)
+ * @method static array refundTransaction(string $transactionIdOrOrderId, array $params)
+ * @method static array directRefundTransaction(string $transactionIdOrOrderId, array $params)
  * @method static array chargeTransaction(array $params)
  * @method static array captureTransaction(array $params)
  * @method static array expireTransaction(string $transactionIdOrOrderId)
