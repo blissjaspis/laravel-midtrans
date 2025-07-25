@@ -31,7 +31,7 @@ MIDTRANS_IS_PRODUCTION=false
 
 ## Usage
 
-You can use this package by injecting the `BlissJaspis\Midtrans\Midtrans` class into your controller or service.
+You can use facade `Midtrans` to use this package.
 
 ```php
 use BlissJaspis\Midtrans\Facades\Midtrans;
