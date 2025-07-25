@@ -5,9 +5,12 @@ namespace BlissJaspis\Midtrans;
 use BlissJaspis\Midtrans\Supports\HttpRequest;
 use BlissJaspis\Midtrans\Translator\FraudStatus;
 use BlissJaspis\Midtrans\Translator\TransactionStatus;
+use BlissJaspis\Midtrans\Traits\Base;
 
 class Midtrans
-{
+{   
+    use Base;
+    
     public function chargeTransaction(array $params)
     {
         return HttpRequest::sendRequest('POST', '/charge', $params);

@@ -83,11 +83,28 @@ class YourController
 
     public function refundTransaction()
     {
-        $refund = Midtrans::gopay()->refundTransaction('1234567890', [
-            'amount' => 10000,
+        Midtrans::gopay()->refundTransaction('order-id-123', [
+            'amount' => 50000,
             'refund_key' => '1234567890',
-            'reason' => 'test',
+            'reason' => 'Item out of stock',
         ]);
+
+        // Or you can use the trait Base to refund transaction
+        // This method is recommended to use if you want to refund transaction without knowing the payment type
+        Midtrans::refundTransaction('order-id-123', [
+            'refund_key' => 'my-refund-key',
+            'amount' => 50000,
+            'reason' => 'Item out of stock',
+        ]);
+    }
+
+    public function cancelTransaction()
+    {
+        Midtrans::creditCard()->cancelTransaction('order-id-123');
+
+        // Or you can use the trait Base to cancel transaction
+        // This method is recommended to use if you want to cancel transaction without knowing the payment type
+        Midtrans::cancelTransaction('order-id-456');
     }
 
     public function translateTransactionStatus()
@@ -108,6 +125,9 @@ class YourController
 
 #### Midtrans
 
+- `cancelTransaction(string $transactionIdOrOrderId)`
+- `refundTransaction(string $transactionIdOrOrderId, array $params)`
+- `directRefundTransaction(string $transactionIdOrOrderId, array $params)`
 - `chargeTransaction(array $params)`
 - `captureTransaction(array $params)`
 - `expireTransaction(string $transactionIdOrOrderId)`
