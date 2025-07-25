@@ -2,7 +2,7 @@
 
 namespace BlissJaspis\Midtrans\Traits;
 
-use BlissJaspis\Midtrans\HttpRequest;
+use BlissJaspis\Midtrans\Supports\HttpRequest;
 
 trait HasSubscription
 {

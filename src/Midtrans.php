@@ -2,6 +2,8 @@
 
 namespace BlissJaspis\Midtrans;
 
+use BlissJaspis\Midtrans\Supports\HttpRequest;
+use BlissJaspis\Midtrans\Translator\FraudStatus;
 use BlissJaspis\Midtrans\Translator\TransactionStatus;
 
 class Midtrans
@@ -37,6 +39,11 @@ class Midtrans
     public function translateTransactionStatus(string $status)
     {
         return (new TransactionStatus())->translate($status);
+    }
+
+    public function translateFraudStatus(string $status)
+    {
+        return (new FraudStatus())->translate($status);
     }
     
     public function creditCard()

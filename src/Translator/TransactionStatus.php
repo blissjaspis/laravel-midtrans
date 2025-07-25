@@ -32,16 +32,17 @@ class TransactionStatus
             self::PARTIAL_CHARGEBACK => $this->partialChargeback(),
             self::EXPIRE => $this->expire(),
             self::FAILURE => $this->failure(),
-            default => $this->respond('Unknown status'),
+            default => $this->respond('Unknown status', 400),
         };
     }
 
-    private function respond(string $message)
+    private function respond(string $message, int $code = 200)
     {
         return response()->json([
-            'status' => 'success',
+            'code' => $code,
+            'status' => $code === 200 ? 'success' : 'error',
             'message' => $message,
-        ]);
+        ], $code);
     }
     
     private function authorized()

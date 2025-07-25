@@ -2,9 +2,9 @@
 
 namespace BlissJaspis\Midtrans;
 
+use BlissJaspis\Midtrans\Supports\HttpRequest;
 use BlissJaspis\Midtrans\Traits\Base;
 use BlissJaspis\Midtrans\Traits\HasSubscription;
-use BlissJaspis\Midtrans\HttpRequest;
 
 class CreditCard
 {

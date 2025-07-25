@@ -95,6 +95,12 @@ class YourController
         $status = Midtrans::translateTransactionStatus('capture');
         return $status;
     }
+
+    public function translateFraudStatus()
+    {
+        $status = Midtrans::translateFraudStatus('accept');
+        return $status;
+    }
 }
 ```
 
@@ -108,6 +114,7 @@ class YourController
 - `getTransactionStatus(string $transactionIdOrOrderId)`
 - `getTransactionStatusB2B(string $transactionIdOrOrderId)`
 - `translateTransactionStatus(string $status)`
+- `translateFraudStatus(string $status)`
 - `creditCard()`
 - `gopay()`
 
