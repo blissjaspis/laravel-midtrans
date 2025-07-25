@@ -10,6 +10,11 @@ class CreditCard
 {
     use Base, HasSubscription;
     
+    public function getToken(array $params)
+    {
+        return HttpRequest::sendRequest('GET', '/token', $params);
+    }
+    
     public function getPointInquiry(string $accountId)
     {
         return $this->httpRequest->sendRequest('GET', '/point/inquiry' . $accountId);

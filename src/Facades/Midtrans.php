@@ -5,7 +5,6 @@ namespace BlissJaspis\Midtrans\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static array getToken(array $params)
  * @method static array chargeTransaction(array $params)
  * @method static array captureTransaction(array $params)
  * @method static array expireTransaction(string $transactionIdOrOrderId)

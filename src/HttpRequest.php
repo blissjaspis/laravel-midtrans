@@ -25,13 +25,12 @@ class HttpRequest
     }
 
     private function make(string $method, string $path, array $data = [], string $version = 'v2')
-    {
+    {   
         $request = Http::baseUrl($this->baseUrl . '/' . $version)
-            ->withBasicAuth($this->serverKey, '')
+            ->withToken(base64_encode($this->serverKey . ':'), 'Basic')
             ->withHeaders($this->headers)
             ->timeout(10)
-            ->connectTimeout(10)
-            ->withToken(base64_encode($this->serverKey . ':'), 'Basic');
+            ->connectTimeout(10);
 
 
         $response = match (strtoupper($method)) {

@@ -4,11 +4,6 @@ namespace BlissJaspis\Midtrans;
 
 class Midtrans
 {
-    public function getToken(array $params)
-    {
-        return HttpRequest::sendRequest('GET', '/token', $params);
-    }
-
     public function chargeTransaction(array $params)
     {
         return HttpRequest::sendRequest('POST', '/charge', $params);

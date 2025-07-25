@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'name' => 'RajaOngkir',
+    'name' => 'Midtrans',
     'env' => 'local',
     'debug' => true,
     'url' => 'http://localhost',
@@ -12,6 +12,6 @@ return [
     'key' => env('APP_KEY', 'base64:'.base64_encode(random_bytes(32))),
     'cipher' => 'AES-256-CBC',
     'providers' => [
-        BlissJaspis\RajaOngkir\Providers\RajaOngkirServiceProvider::class,
+        BlissJaspis\Midtrans\Providers\MidtransServiceProvider::class,
     ]
 ];
