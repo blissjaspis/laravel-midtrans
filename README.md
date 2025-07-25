@@ -89,6 +89,12 @@ class YourController
             'reason' => 'test',
         ]);
     }
+
+    public function translateTransactionStatus()
+    {
+        $status = Midtrans::translateTransactionStatus('capture');
+        return $status;
+    }
 }
 ```
 
@@ -101,6 +107,7 @@ class YourController
 - `expireTransaction(string $transactionIdOrOrderId)`
 - `getTransactionStatus(string $transactionIdOrOrderId)`
 - `getTransactionStatusB2B(string $transactionIdOrOrderId)`
+- `translateTransactionStatus(string $status)`
 - `creditCard()`
 - `gopay()`
 
