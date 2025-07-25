@@ -10,11 +10,6 @@ use BlissJaspis\Midtrans\Traits\Base;
 class Midtrans
 {   
     use Base;
-    
-    public function chargeTransaction(array $params)
-    {
-        return HttpRequest::sendRequest('POST', '/charge', $params);
-    }
 
     public function captureTransaction(array $params)
     {

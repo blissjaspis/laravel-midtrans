@@ -6,6 +6,11 @@ use BlissJaspis\Midtrans\Supports\HttpRequest;
 
 trait Base
 {
+    public function chargeTransaction(array $params)
+    {
+        return HttpRequest::sendRequest('POST', '/charge', $params);
+    }
+    
     /**
      * Use this method to expire a transaction.
      * if the transaction is already settled, use refundTransaction instead.

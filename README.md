@@ -139,6 +139,7 @@ class YourController
 - `gopay()`
 
 #### Credit Card
+- `chargeTransaction(array $params)`
 - `getToken(array $params)`
 - `registerCard(array $params)`
 - `getPointInquiry(string $cardToken)`
@@ -153,6 +154,7 @@ class YourController
 - `updateSubscription(string $subscriptionId, array $params)`
 
 #### Gopay
+- `chargeTransaction(array $params)`
 - `createPayAccount(array $params)`
 - `getAccountLinkedStatus(string $accountId)`
 - `unbindAccount(string $accountId)`
