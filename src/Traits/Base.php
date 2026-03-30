@@ -10,16 +10,16 @@ trait Base
     {
         return HttpRequest::sendRequest('POST', '/charge', $params);
     }
-    
+
     /**
      * Use this method to expire a transaction.
      * if the transaction is already settled, use refundTransaction instead.
      */
     public function cancelTransaction(string $transactionIdOrOrderId)
     {
-        return HttpRequest::sendRequest('POST', '/' . $transactionIdOrOrderId . '/cancel');
+        return HttpRequest::sendRequest('POST', '/'.$transactionIdOrOrderId.'/cancel');
     }
-    
+
     /**
      * Use this method to refund a transaction.
      * if the transaction is not settled, use cancelTransaction instead.
@@ -29,7 +29,7 @@ trait Base
      */
     public function refundTransaction(string $transactionIdOrOrderId, array $params)
     {
-        return HttpRequest::sendRequest('POST', '/' . $transactionIdOrOrderId . '/refund', [
+        return HttpRequest::sendRequest('POST', '/'.$transactionIdOrOrderId.'/refund', [
             'refund_key' => $params['refund_key'],
             'amount' => $params['amount'],
             'reason' => $params['reason'],
@@ -38,7 +38,7 @@ trait Base
 
     public function directRefundTransaction(string $transactionIdOrOrderId, array $params)
     {
-        return HttpRequest::sendRequest('POST', '/' . $transactionIdOrOrderId . '/refund/online/direct', [
+        return HttpRequest::sendRequest('POST', '/'.$transactionIdOrOrderId.'/refund/online/direct', [
             'refund_key' => $params['refund_key'],
             'amount' => $params['amount'],
             'reason' => $params['reason'],

@@ -5,16 +5,27 @@ namespace BlissJaspis\Midtrans\Translator;
 class TransactionStatus
 {
     public const AUTHORIZED = 'authorized';
+
     public const CAPTURE = 'capture';
+
     public const SETTLEMENT = 'settlement';
+
     public const DENY = 'deny';
+
     public const PENDING = 'pending';
+
     public const CANCEL = 'cancel';
+
     public const REFUND = 'refund';
+
     public const PARTIAL_REFUND = 'partial_refund';
+
     public const CHARGEBACK = 'chargeback';
+
     public const PARTIAL_CHARGEBACK = 'partial_chargeback';
+
     public const EXPIRE = 'expire';
+
     public const FAILURE = 'failure';
 
     public function translate(string $status)
@@ -44,7 +55,7 @@ class TransactionStatus
             'message' => $message,
         ], $code);
     }
-    
+
     private function authorized()
     {
         return $this->respond('Midtrans authorizes the payment card used for the transaction. Must be captured to process the balance.
@@ -69,7 +80,7 @@ Note: This is valid for payment card only.');
     private function pending()
     {
         return $this->respond('The transaction is created and is waiting to be paid by the customer at the payment providers like direct debit, Bank Transfer, E-wallet, and so on.');
-    }   
+    }
 
     private function cancel()
     {
@@ -105,5 +116,4 @@ Note: This is valid for payment card only.');
     {
         return $this->respond('Unexpected error occurred during transaction processing.');
     }
-    
 }

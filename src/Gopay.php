@@ -24,11 +24,11 @@ class Gopay
 
     public function getAccountLinkedStatus(string $accountId)
     {
-        return HttpRequest::sendRequest('GET', '/pay/account/' . $accountId);
+        return HttpRequest::sendRequest('GET', '/pay/account/'.$accountId);
     }
 
     public function unbindAccount(string $accountId)
     {
-        return HttpRequest::sendRequest('POST', '/pay/account/' . $accountId . '/unbind');
+        return HttpRequest::sendRequest('POST', '/pay/account/'.$accountId.'/unbind');
     }
 }

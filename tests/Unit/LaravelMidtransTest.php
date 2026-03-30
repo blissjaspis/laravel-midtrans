@@ -11,7 +11,7 @@ class LaravelMidtransTest extends TestCase
     #[Test]
     public function laravel_midtrans_can_be_instantiated()
     {
-        $midtrans = new Midtrans();
+        $midtrans = new Midtrans;
         $this->assertInstanceOf(Midtrans::class, $midtrans);
     }
 

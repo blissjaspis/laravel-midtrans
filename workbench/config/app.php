@@ -1,5 +1,7 @@
 <?php
 
+use BlissJaspis\Midtrans\Providers\MidtransServiceProvider;
+
 return [
     'name' => 'Midtrans',
     'env' => 'local',
@@ -12,6 +14,6 @@ return [
     'key' => env('APP_KEY', 'base64:'.base64_encode(random_bytes(32))),
     'cipher' => 'AES-256-CBC',
     'providers' => [
-        BlissJaspis\Midtrans\Providers\MidtransServiceProvider::class,
-    ]
+        MidtransServiceProvider::class,
+    ],
 ];

@@ -19,7 +19,7 @@ class MidtransServiceProvider extends ServiceProvider
 
         $this->app->singleton(Midtrans::class);
     }
-    
+
     /**
      * Bootstrap the application services.
      */

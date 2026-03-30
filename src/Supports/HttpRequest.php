@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Http;
 class HttpRequest
 {
     protected $baseUrl;
+
     protected $serverKey;
+
     protected $headers = [
         'Accept' => 'application/json',
         'Content-Type' => 'application/json',
@@ -25,13 +27,12 @@ class HttpRequest
     }
 
     private function make(string $method, string $path, array $data = [], string $version = 'v2')
-    {   
-        $request = Http::baseUrl($this->baseUrl . '/' . $version)
-            ->withToken(base64_encode($this->serverKey . ':'), 'Basic')
+    {
+        $request = Http::baseUrl($this->baseUrl.'/'.$version)
+            ->withToken(base64_encode($this->serverKey.':'), 'Basic')
             ->withHeaders($this->headers)
             ->timeout(10)
             ->connectTimeout(10);
-
 
         $response = match (strtoupper($method)) {
             'GET' => $request->get($path, $data),
@@ -44,8 +45,8 @@ class HttpRequest
 
     public static function sendRequest(string $method, string $path, array $data = [], string $version = 'v2')
     {
-        $instance = new static();
-        
+        $instance = new static;
+
         return $instance->make($method, $path, $data, $version);
     }
 }

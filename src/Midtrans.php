@@ -3,12 +3,12 @@
 namespace BlissJaspis\Midtrans;
 
 use BlissJaspis\Midtrans\Supports\HttpRequest;
+use BlissJaspis\Midtrans\Traits\Base;
 use BlissJaspis\Midtrans\Translator\FraudStatus;
 use BlissJaspis\Midtrans\Translator\TransactionStatus;
-use BlissJaspis\Midtrans\Traits\Base;
 
 class Midtrans
-{   
+{
     use Base;
 
     public function captureTransaction(array $params)
@@ -21,36 +21,36 @@ class Midtrans
 
     public function expireTransaction(string $transactionIdOrOrderId)
     {
-        return HttpRequest::sendRequest('POST', '/' . $transactionIdOrOrderId . '/expire');
+        return HttpRequest::sendRequest('POST', '/'.$transactionIdOrOrderId.'/expire');
     }
 
     public function getTransactionStatus(string $transactionIdOrOrderId)
     {
-        return HttpRequest::sendRequest('GET', '/' . $transactionIdOrOrderId . '/status');
+        return HttpRequest::sendRequest('GET', '/'.$transactionIdOrOrderId.'/status');
     }
 
     public function getTransactionStatusB2B(string $transactionIdOrOrderId)
     {
-        return HttpRequest::sendRequest('GET', '/' . $transactionIdOrOrderId . '/status/b2b');
+        return HttpRequest::sendRequest('GET', '/'.$transactionIdOrOrderId.'/status/b2b');
     }
 
     public function translateTransactionStatus(string $status)
     {
-        return (new TransactionStatus())->translate($status);
+        return (new TransactionStatus)->translate($status);
     }
 
     public function translateFraudStatus(string $status)
     {
-        return (new FraudStatus())->translate($status);
+        return (new FraudStatus)->translate($status);
     }
-    
+
     public function creditCard()
     {
-        return new CreditCard();
+        return new CreditCard;
     }
 
     public function gopay()
     {
-        return new Gopay();
+        return new Gopay;
     }
 }

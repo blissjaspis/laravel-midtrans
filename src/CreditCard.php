@@ -9,15 +9,15 @@ use BlissJaspis\Midtrans\Traits\HasSubscription;
 class CreditCard
 {
     use Base, HasSubscription;
-    
+
     public function getToken(array $params)
     {
         return HttpRequest::sendRequest('GET', '/token', $params);
     }
-    
+
     public function getPointInquiry(string $accountId)
     {
-        return $this->httpRequest->sendRequest('GET', '/point/inquiry' . $accountId);
+        return HttpRequest::sendRequest('GET', '/point/inquiry/'.$accountId);
     }
 
     public function registerCard(array $params)
@@ -32,6 +32,6 @@ class CreditCard
 
     public function getBankIdentificationNumber(string $bin)
     {
-        return HttpRequest::sendRequest('GET', '/bins/' . $bin, [], 'v1');
+        return HttpRequest::sendRequest('GET', '/bins/'.$bin, [], 'v1');
     }
 }

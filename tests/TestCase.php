@@ -8,7 +8,7 @@ use Orchestra\Testbench\Concerns\WithWorkbench;
 class TestCase extends \Orchestra\Testbench\TestCase
 {
     use WithWorkbench;
-    
+
     protected function setUp(): void
     {
         parent::setUp();

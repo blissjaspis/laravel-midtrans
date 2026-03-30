@@ -5,8 +5,9 @@ namespace BlissJaspis\Midtrans\Translator;
 class FraudStatus
 {
     const ACCEPT = 'accept';
+
     const REJECT = 'reject';
-    
+
     public function translate(string $status)
     {
         return match ($status) {
@@ -16,7 +17,7 @@ class FraudStatus
         };
     }
 
-    public function respond(string $message, int $code = 200)
+    private function respond(string $message, int $code = 200)
     {
         return response()->json([
             'code' => $code,

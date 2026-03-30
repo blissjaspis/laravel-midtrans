@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static array translateTransactionStatus(string $status)
  * @method static \BlissJaspis\Midtrans\CreditCard creditCard()
  * @method static \BlissJaspis\Midtrans\Gopay gopay()
- * 
+ *
  * @see \BlissJaspis\Midtrans\Midtrans
  */
 final class Midtrans extends Facade
