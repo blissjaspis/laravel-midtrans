@@ -6,12 +6,14 @@
     "require": {
         "php": "^8.2",
         "guzzlehttp/guzzle": "^7.9",
+        "illuminate/http": "^11.0 || ^12.0 || ^13.0",
         "illuminate/support": "^11.0 || ^12.0 || ^13.0"
     },
     "require-dev": {
         "laravel/pint": "^1.29",
         "orchestra/testbench": "^10.4 || ^11.0",
-        "phpunit/phpunit": "^12.0 || ^13.0"
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-laravel": "^4.0"
     },
     "license": "MIT",
     "autoload": {
@@ -35,8 +37,7 @@
         "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
         "build": "@php vendor/bin/testbench workbench:build --ansi",
-        "analyze": "vendor/bin/phpstan analyse",
-        "test": "@php vendor/bin/phpunit",
+        "test": "@php vendor/bin/pest",
         "format": "vendor/bin/pint",
         "serve": [
             "Composer\\Config::disableProcessTimeout",
@@ -54,7 +55,10 @@
         }
     ],
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
     "extra": {
         "laravel": {

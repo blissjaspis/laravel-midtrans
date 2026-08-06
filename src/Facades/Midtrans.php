@@ -6,14 +6,18 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static array cancelTransaction(string $transactionIdOrOrderId)
- * @method static array refundTransaction(string $transactionIdOrOrderId, array $params)
- * @method static array directRefundTransaction(string $transactionIdOrOrderId, array $params)
+ * @method static array refundTransaction(string $transactionIdOrOrderId, array $params = [])
+ * @method static array directRefundTransaction(string $transactionIdOrOrderId, array $params = [])
  * @method static array chargeTransaction(array $params)
  * @method static array captureTransaction(array $params)
+ * @method static array approveTransaction(string $transactionIdOrOrderId)
+ * @method static array denyTransaction(string $transactionIdOrOrderId)
  * @method static array expireTransaction(string $transactionIdOrOrderId)
  * @method static array getTransactionStatus(string $transactionIdOrOrderId)
  * @method static array getTransactionStatusB2B(string $transactionIdOrOrderId)
+ * @method static bool isValidNotificationSignature(array $payload, ?string $serverKey = null)
  * @method static array translateTransactionStatus(string $status)
+ * @method static array translateFraudStatus(string $status)
  * @method static \BlissJaspis\Midtrans\CreditCard creditCard()
  * @method static \BlissJaspis\Midtrans\Gopay gopay()
  *

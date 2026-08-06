@@ -13,10 +13,24 @@ class Midtrans
 
     public function captureTransaction(array $params)
     {
-        return HttpRequest::sendRequest('POST', '/capture', [
-            'transaction_id' => $params['transaction_id'],
-            'gross_amount' => $params['gross_amount'],
-        ]);
+        return HttpRequest::sendRequest(
+            'POST',
+            '/capture',
+            array_filter([
+                'transaction_id' => $params['transaction_id'],
+                'gross_amount' => $params['gross_amount'] ?? null,
+            ], fn ($value) => $value !== null)
+        );
+    }
+
+    public function approveTransaction(string $transactionIdOrOrderId)
+    {
+        return HttpRequest::sendRequest('POST', '/'.$transactionIdOrOrderId.'/approve');
+    }
+
+    public function denyTransaction(string $transactionIdOrOrderId)
+    {
+        return HttpRequest::sendRequest('POST', '/'.$transactionIdOrOrderId.'/deny');
     }
 
     public function expireTransaction(string $transactionIdOrOrderId)
@@ -32,6 +46,25 @@ class Midtrans
     public function getTransactionStatusB2B(string $transactionIdOrOrderId)
     {
         return HttpRequest::sendRequest('GET', '/'.$transactionIdOrOrderId.'/status/b2b');
+    }
+
+    public function isValidNotificationSignature(array $payload, ?string $serverKey = null): bool
+    {
+        $signatureKey = $payload['signature_key'] ?? null;
+
+        if (! is_string($signatureKey) || $signatureKey === '') {
+            return false;
+        }
+
+        $expected = hash(
+            'sha512',
+            ($payload['order_id'] ?? '').
+            ($payload['status_code'] ?? '').
+            ($payload['gross_amount'] ?? '').
+            ($serverKey ?? config('midtrans.server_key'))
+        );
+
+        return hash_equals($expected, $signatureKey);
     }
 
     public function translateTransactionStatus(string $status)

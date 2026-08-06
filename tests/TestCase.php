@@ -31,8 +31,9 @@ class TestCase extends \Orchestra\Testbench\TestCase
                 'database' => ':memory:',
             ]);
             $config->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
-            $config->set('midtrans.server_key', 'your-api-key');
-            $config->set('midtrans.base_url', 'https://api.sandbox.midtrans.com');
+            $config->set('midtrans.server_key', 'SB-Mid-server-test');
+            $config->set('midtrans.client_key', 'SB-Mid-client-test');
+            $config->set('midtrans.is_production', false);
         });
     }
 }

@@ -15,18 +15,22 @@ class CreditCard
         return HttpRequest::sendRequest('GET', '/token', $params);
     }
 
-    public function getPointInquiry(string $accountId)
+    public function getPointInquiry(string $tokenId, ?string $grossAmount = null)
     {
-        return HttpRequest::sendRequest('GET', '/point/inquiry/'.$accountId);
+        $query = array_filter([
+            'gross_amount' => $grossAmount,
+        ], fn ($value) => $value !== null);
+
+        return HttpRequest::sendRequest('GET', '/point_inquiry/'.$tokenId, $query);
     }
 
     public function registerCard(array $params)
     {
-        return HttpRequest::sendRequest('POST', '/card/register', [
+        return HttpRequest::sendRequest('GET', '/card/register', [
             'card_number' => $params['card_number'],
             'card_exp_month' => $params['card_exp_month'],
             'card_exp_year' => $params['card_exp_year'],
-            'client_key' => config('midtrans.client_key'),
+            'client_key' => $params['client_key'] ?? config('midtrans.client_key'),
         ]);
     }
 

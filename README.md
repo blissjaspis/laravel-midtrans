@@ -10,7 +10,7 @@ This package provides a simple and easy-to-use Laravel wrapper for the Midtrans 
 You can install the package via composer:
 
 ```bash
-composer require bliss-jaspis/laravel-midtrans
+composer require blissjaspis/laravel-midtrans
 ```
 
 You must publish the configuration file with:
@@ -48,7 +48,6 @@ class YourController
             'card_exp_year' => '2025',
             'card_cvv' => '123',
             'client_key' => config('midtrans.client_key'),
-            'token_id' => '1234567890',
         ]);
 
         return $token;
@@ -75,10 +74,21 @@ class YourController
                 'email' => 'john.doe@example.com',
                 'phone' => '081234567890',
             ],
-            'qris': [
+            'qris' => [
                 'acquirer' => 'gopay'
             ]
         ]);
+    }
+
+    public function handleNotification()
+    {
+        $payload = request()->all();
+
+        if (! Midtrans::isValidNotificationSignature($payload)) {
+            abort(403, 'Invalid Midtrans signature.');
+        }
+
+        // Handle notification...
     }
 
     public function refundTransaction()
@@ -126,13 +136,16 @@ class YourController
 #### Midtrans
 
 - `cancelTransaction(string $transactionIdOrOrderId)`
-- `refundTransaction(string $transactionIdOrOrderId, array $params)`
-- `directRefundTransaction(string $transactionIdOrOrderId, array $params)`
+- `refundTransaction(string $transactionIdOrOrderId, array $params = [])`
+- `directRefundTransaction(string $transactionIdOrOrderId, array $params = [])`
 - `chargeTransaction(array $params)`
 - `captureTransaction(array $params)`
+- `approveTransaction(string $transactionIdOrOrderId)`
+- `denyTransaction(string $transactionIdOrOrderId)`
 - `expireTransaction(string $transactionIdOrOrderId)`
 - `getTransactionStatus(string $transactionIdOrOrderId)`
 - `getTransactionStatusB2B(string $transactionIdOrOrderId)`
+- `isValidNotificationSignature(array $payload, ?string $serverKey = null)`
 - `translateTransactionStatus(string $status)`
 - `translateFraudStatus(string $status)`
 - `creditCard()`
@@ -142,14 +155,15 @@ class YourController
 - `chargeTransaction(array $params)`
 - `getToken(array $params)`
 - `registerCard(array $params)`
-- `getPointInquiry(string $cardToken)`
+- `getPointInquiry(string $cardToken, ?string $grossAmount = null)`
 - `getBankIdentificationNumber(string $binNumber)`
 - `cancelTransaction(string $transactionIdOrOrderId)`
-- `refundTransaction(string $transactionIdOrOrderId, array $params)`
-- `directRefundTransaction(string $transactionIdOrOrderId, array $params)`
+- `refundTransaction(string $transactionIdOrOrderId, array $params = [])`
+- `directRefundTransaction(string $transactionIdOrOrderId, array $params = [])`
 - `createSubscription(array $params)`
 - `getSubscription(string $subscriptionId)`
 - `disableSubscription(string $subscriptionId)`
+- `cancelSubscription(string $subscriptionId)`
 - `enableSubscription(string $subscriptionId)`
 - `updateSubscription(string $subscriptionId, array $params)`
 
@@ -159,17 +173,18 @@ class YourController
 - `getAccountLinkedStatus(string $accountId)`
 - `unbindAccount(string $accountId)`
 - `cancelTransaction(string $transactionIdOrOrderId)`
-- `refundTransaction(string $transactionIdOrOrderId, array $params)`
-- `directRefundTransaction(string $transactionIdOrOrderId, array $params)`
+- `refundTransaction(string $transactionIdOrOrderId, array $params = [])`
+- `directRefundTransaction(string $transactionIdOrOrderId, array $params = [])`
 - `createSubscription(array $params)`
 - `getSubscription(string $subscriptionId)`
 - `disableSubscription(string $subscriptionId)`
+- `cancelSubscription(string $subscriptionId)`
 - `enableSubscription(string $subscriptionId)`
 - `updateSubscription(string $subscriptionId, array $params)`
 
 
 ### **API Reference**
-> For more detailed information about the API endpoints, parameters, and response structures, please refer to the official [Midtrans API Documentation](https://midtrans.com/en/documentation).
+> For more detailed information about the API endpoints, parameters, and response structures, please refer to the official [Midtrans API Documentation](https://docs.midtrans.com).
 
 ## Testing
 
@@ -177,17 +192,11 @@ class YourController
 composer test
 ```
 
+This package uses [Pest](https://pestphp.com) for testing. Running tests requires PHP 8.3+.
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
 
 ## Credits
 

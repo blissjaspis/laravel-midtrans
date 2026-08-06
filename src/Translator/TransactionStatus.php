@@ -28,7 +28,7 @@ class TransactionStatus
 
     public const FAILURE = 'failure';
 
-    public function translate(string $status)
+    public function translate(string $status): array
     {
         return match ($status) {
             self::AUTHORIZED => $this->authorized(),
@@ -47,72 +47,72 @@ class TransactionStatus
         };
     }
 
-    private function respond(string $message, int $code = 200)
+    private function respond(string $message, int $code = 200): array
     {
-        return response()->json([
+        return [
             'code' => $code,
             'status' => $code === 200 ? 'success' : 'error',
             'message' => $message,
-        ], $code);
+        ];
     }
 
-    private function authorized()
+    private function authorized(): array
     {
         return $this->respond('Midtrans authorizes the payment card used for the transaction. Must be captured to process the balance.
 Note: This is valid for payment card only.');
     }
 
-    private function capture()
+    private function capture(): array
     {
         return $this->respond('The transaction is successful and the card balance is captured successfully. If no action is taken by you, the transaction will be successfully settled within 24 hours or within the agreed settlement time with your partner bank. The transaction status is settlement. It is safe to assume a successful payment.');
     }
 
-    private function settlement()
+    private function settlement(): array
     {
         return $this->respond('The transaction is successfully settled. Funds have been credited to your account.');
     }
 
-    private function deny()
+    private function deny(): array
     {
         return $this->respond('The credentials used for payment are rejected by the payment provider or Midtrans Fraud Detection System (FDS). To know the reason and details for the denied transaction, see the status_message in the response.');
     }
 
-    private function pending()
+    private function pending(): array
     {
         return $this->respond('The transaction is created and is waiting to be paid by the customer at the payment providers like direct debit, Bank Transfer, E-wallet, and so on.');
     }
 
-    private function cancel()
+    private function cancel(): array
     {
         return $this->respond('The transaction is cancelled. This can be triggered by Midtrans or the partner bank. Note: For card payments, cancel status is triggered by Midtrans in case of Pre-Authorization transaction when an Authorized transaction exceeded the capture time limit');
     }
 
-    private function refund()
+    private function refund(): array
     {
         return $this->respond('The transaction is marked to be refunded. Refund status is triggered by you.');
     }
 
-    private function partialRefund()
+    private function partialRefund(): array
     {
         return $this->respond('The transaction is marked to be partially refunded.');
     }
 
-    private function chargeback()
+    private function chargeback(): array
     {
         return $this->respond('The transaction is marked to be charged back. Note: Applicable for payment card only.');
     }
 
-    private function partialChargeback()
+    private function partialChargeback(): array
     {
         return $this->respond('The transaction is marked to be partially charged back.');
     }
 
-    private function expire()
+    private function expire(): array
     {
         return $this->respond('The transaction is not available for processing, because the payment was delayed.');
     }
 
-    private function failure()
+    private function failure(): array
     {
         return $this->respond('Unexpected error occurred during transaction processing.');
     }

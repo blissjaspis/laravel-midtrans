@@ -12,8 +12,8 @@ trait Base
     }
 
     /**
-     * Use this method to expire a transaction.
-     * if the transaction is already settled, use refundTransaction instead.
+     * Cancel a pending or authorized transaction.
+     * If the transaction is already settled, use refundTransaction instead.
      */
     public function cancelTransaction(string $transactionIdOrOrderId)
     {
@@ -21,27 +21,35 @@ trait Base
     }
 
     /**
-     * Use this method to refund a transaction.
-     * if the transaction is not settled, use cancelTransaction instead.
+     * Refund a settled transaction.
+     * If the transaction is not settled, use cancelTransaction instead.
      *
      * Refund transaction is supported only for credit_card, gopay, shopeepay,
      * QRIS, kredivo and akulaku payment methods.
      */
-    public function refundTransaction(string $transactionIdOrOrderId, array $params)
+    public function refundTransaction(string $transactionIdOrOrderId, array $params = [])
     {
-        return HttpRequest::sendRequest('POST', '/'.$transactionIdOrOrderId.'/refund', [
-            'refund_key' => $params['refund_key'],
-            'amount' => $params['amount'],
-            'reason' => $params['reason'],
-        ]);
+        return HttpRequest::sendRequest(
+            'POST',
+            '/'.$transactionIdOrOrderId.'/refund',
+            array_filter([
+                'refund_key' => $params['refund_key'] ?? null,
+                'amount' => $params['amount'] ?? null,
+                'reason' => $params['reason'] ?? null,
+            ], fn ($value) => $value !== null)
+        );
     }
 
-    public function directRefundTransaction(string $transactionIdOrOrderId, array $params)
+    public function directRefundTransaction(string $transactionIdOrOrderId, array $params = [])
     {
-        return HttpRequest::sendRequest('POST', '/'.$transactionIdOrOrderId.'/refund/online/direct', [
-            'refund_key' => $params['refund_key'],
-            'amount' => $params['amount'],
-            'reason' => $params['reason'],
-        ]);
+        return HttpRequest::sendRequest(
+            'POST',
+            '/'.$transactionIdOrOrderId.'/refund/online/direct',
+            array_filter([
+                'refund_key' => $params['refund_key'] ?? null,
+                'amount' => $params['amount'] ?? null,
+                'reason' => $params['reason'] ?? null,
+            ], fn ($value) => $value !== null)
+        );
     }
 }

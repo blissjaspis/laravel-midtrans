@@ -33,6 +33,6 @@ trait HasSubscription
 
     public function updateSubscription(string $subscriptionId, array $params)
     {
-        return HttpRequest::sendRequest('PUT', '/subscriptions/'.$subscriptionId, $params, 'v1');
+        return HttpRequest::sendRequest('PATCH', '/subscriptions/'.$subscriptionId, $params, 'v1');
     }
 }
