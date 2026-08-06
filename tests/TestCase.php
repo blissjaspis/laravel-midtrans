@@ -34,6 +34,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
             $config->set('midtrans.server_key', 'SB-Mid-server-test');
             $config->set('midtrans.client_key', 'SB-Mid-client-test');
             $config->set('midtrans.is_production', false);
+            $config->set('midtrans.timeout', 10);
+            $config->set('midtrans.connect_timeout', 10);
         });
     }
 }

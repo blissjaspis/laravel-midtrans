@@ -20,6 +20,13 @@ use Illuminate\Support\Facades\Facade;
  * @method static array translateFraudStatus(string $status)
  * @method static \BlissJaspis\Midtrans\CreditCard creditCard()
  * @method static \BlissJaspis\Midtrans\Gopay gopay()
+ * @method static \BlissJaspis\Midtrans\BankTransfer bankTransfer()
+ * @method static \BlissJaspis\Midtrans\Echannel echannel()
+ * @method static \BlissJaspis\Midtrans\ShopeePay shopeePay()
+ * @method static \BlissJaspis\Midtrans\Qris qris()
+ * @method static \BlissJaspis\Midtrans\Akulaku akulaku()
+ * @method static \BlissJaspis\Midtrans\Kredivo kredivo()
+ * @method static \BlissJaspis\Midtrans\ConvenienceStore convenienceStore()
  *
  * @see \BlissJaspis\Midtrans\Midtrans
  */

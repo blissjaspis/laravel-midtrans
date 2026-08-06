@@ -3,7 +3,7 @@
 > **Note**
 > This package supports Laravel versions 11, 12, and 13.
 
-This package provides a simple and easy-to-use Laravel wrapper for the Midtrans API.
+This package provides a simple and easy-to-use Laravel wrapper for the Midtrans Core API.
 
 ## Installation
 
@@ -27,36 +27,50 @@ Add the following to your `.env` file:
 MIDTRANS_SERVER_KEY=your-api-key
 MIDTRANS_CLIENT_KEY=your-client-key
 MIDTRANS_IS_PRODUCTION=false
+MIDTRANS_TIMEOUT=10
+MIDTRANS_CONNECT_TIMEOUT=10
 ```
+
+## PCI guidance
+
+For card payments, Midtrans recommends tokenizing sensitive card data **on the client** with Midtrans.js / the frontend `/v2/token` flow using your `client_key`. Avoid sending raw PAN/CVV through your Laravel backend when possible, so your server stays outside full PCI card-data scope.
+
+Server-side `creditCard()->getToken()` / `registerCard()` helpers remain available for controlled backend flows, but prefer client-side tokenization in production apps.
 
 ## Usage
 
 You can use facade `Midtrans` to use this package.
 
 ```php
+use BlissJaspis\Midtrans\Exceptions\MidtransApiException;
 use BlissJaspis\Midtrans\Facades\Midtrans;
 
 class YourController
 {
     // ...
 
-    public function getToken()
+    public function chargeBankTransfer()
     {
-        $token = Midtrans::creditCard()->getToken([
-            'card_number' => '4355084355084358',
-            'card_exp_month' => '07',
-            'card_exp_year' => '2025',
-            'card_cvv' => '123',
-            'client_key' => config('midtrans.client_key'),
-        ]);
-
-        return $token;
+        try {
+            return Midtrans::bankTransfer()->charge([
+                'transaction_details' => [
+                    'order_id' => 'order-123',
+                    'gross_amount' => 10000,
+                ],
+                'bank_transfer' => [
+                    'bank' => 'bca',
+                ],
+            ]);
+        } catch (MidtransApiException $e) {
+            // $e->statusCode(), $e->validationMessages(), $e->responseBody()
+            report($e);
+            abort(502, $e->getMessage());
+        }
     }
 
     public function chargeQRIS()
     {
-        $charge = Midtrans::chargeTransaction([
-            'payment_type' => 'qris',
+        return Midtrans::qris()->charge([
             'transaction_details' => [
                 'order_id' => '1234567890',
                 'gross_amount' => 10000,
@@ -66,7 +80,8 @@ class YourController
                     'id' => '1234567890',
                     'price' => 10000,
                     'quantity' => 1,
-                ]
+                    'name' => 'Product',
+                ],
             ],
             'customer_details' => [
                 'first_name' => 'John',
@@ -75,8 +90,8 @@ class YourController
                 'phone' => '081234567890',
             ],
             'qris' => [
-                'acquirer' => 'gopay'
-            ]
+                'acquirer' => 'gopay',
+            ],
         ]);
     }
 
@@ -99,8 +114,7 @@ class YourController
             'reason' => 'Item out of stock',
         ]);
 
-        // Or you can use the trait Base to refund transaction
-        // This method is recommended to use if you want to refund transaction without knowing the payment type
+        // Or refund without knowing the payment type:
         Midtrans::refundTransaction('order-id-123', [
             'refund_key' => 'my-refund-key',
             'amount' => 50000,
@@ -111,22 +125,17 @@ class YourController
     public function cancelTransaction()
     {
         Midtrans::creditCard()->cancelTransaction('order-id-123');
-
-        // Or you can use the trait Base to cancel transaction
-        // This method is recommended to use if you want to cancel transaction without knowing the payment type
         Midtrans::cancelTransaction('order-id-456');
     }
 
     public function translateTransactionStatus()
     {
-        $status = Midtrans::translateTransactionStatus('capture');
-        return $status;
+        return Midtrans::translateTransactionStatus('capture');
     }
 
     public function translateFraudStatus()
     {
-        $status = Midtrans::translateFraudStatus('accept');
-        return $status;
+        return Midtrans::translateFraudStatus('accept');
     }
 }
 ```
@@ -150,6 +159,13 @@ class YourController
 - `translateFraudStatus(string $status)`
 - `creditCard()`
 - `gopay()`
+- `bankTransfer()`
+- `echannel()`
+- `shopeePay()`
+- `qris()`
+- `akulaku()`
+- `kredivo()`
+- `convenienceStore()`
 
 #### Credit Card
 - `chargeTransaction(array $params)`
@@ -168,7 +184,7 @@ class YourController
 - `updateSubscription(string $subscriptionId, array $params)`
 
 #### Gopay
-- `chargeTransaction(array $params)`
+- `charge(array $params)` / `chargeTransaction(array $params)`
 - `createPayAccount(array $params)`
 - `getAccountLinkedStatus(string $accountId)`
 - `unbindAccount(string $accountId)`
@@ -182,6 +198,27 @@ class YourController
 - `enableSubscription(string $subscriptionId)`
 - `updateSubscription(string $subscriptionId, array $params)`
 
+#### Other payment helpers
+Each of these exposes `charge(array $params)` (sets `payment_type` for you) plus cancel/refund helpers from the shared base trait:
+
+- `bankTransfer()` — Virtual Account (`bca`, `bni`, `bri`, `cimb`, `permata`)
+- `echannel()` — Mandiri Bill Payment
+- `shopeePay()`
+- `qris()`
+- `akulaku()`
+- `kredivo()`
+- `convenienceStore()` — Alfamart / Indomaret (`cstore`)
+
+### Error handling
+
+Failed Midtrans HTTP responses throw `BlissJaspis\Midtrans\Exceptions\MidtransApiException` with:
+
+- `statusCode()` — Midtrans `status_code`
+- `validationMessages()` — Midtrans `validation_messages`
+- `responseBody()` — decoded response payload
+- `httpStatus()` — HTTP status code
+
+Missing `MIDTRANS_SERVER_KEY` throws `BlissJaspis\Midtrans\Exceptions\InvalidConfigurationException` before any request is sent.
 
 ### **API Reference**
 > For more detailed information about the API endpoints, parameters, and response structures, please refer to the official [Midtrans API Documentation](https://docs.midtrans.com).

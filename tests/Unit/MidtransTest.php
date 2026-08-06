@@ -1,5 +1,7 @@
 <?php
 
+use BlissJaspis\Midtrans\Exceptions\InvalidConfigurationException;
+use BlissJaspis\Midtrans\Exceptions\MidtransApiException;
 use BlissJaspis\Midtrans\Facades\Midtrans;
 use BlissJaspis\Midtrans\Midtrans as MidtransClient;
 use Illuminate\Support\Facades\Http;
@@ -135,4 +137,85 @@ it('returns an array for transaction status translations', function () {
     expect($status)->toBeArray()
         ->and($status['code'])->toBe(200)
         ->and($status['status'])->toBe('success');
+});
+
+it('charges bank transfer with payment_type set automatically', function () {
+    Http::fake([
+        'https://api.sandbox.midtrans.com/v2/charge' => Http::response(['status_code' => '201'], 201),
+    ]);
+
+    Midtrans::bankTransfer()->charge([
+        'transaction_details' => [
+            'order_id' => 'order-va-1',
+            'gross_amount' => 10000,
+        ],
+        'bank_transfer' => [
+            'bank' => 'bca',
+        ],
+    ]);
+
+    Http::assertSent(function ($request) {
+        $data = $request->data();
+
+        return $request->method() === 'POST'
+            && str_ends_with(parse_url($request->url(), PHP_URL_PATH), '/charge')
+            && $data['payment_type'] === 'bank_transfer'
+            && $data['bank_transfer']['bank'] === 'bca';
+    });
+});
+
+it('charges qris shopeepay akulaku and convenience store helpers', function (string $method, string $paymentType) {
+    Http::fake([
+        'https://api.sandbox.midtrans.com/v2/charge' => Http::response(['status_code' => '201'], 201),
+    ]);
+
+    Midtrans::{$method}()->charge([
+        'transaction_details' => [
+            'order_id' => 'order-'.$paymentType,
+            'gross_amount' => 15000,
+        ],
+    ]);
+
+    Http::assertSent(fn ($request) => $request->data()['payment_type'] === $paymentType);
+})->with([
+    ['qris', 'qris'],
+    ['shopeePay', 'shopeepay'],
+    ['akulaku', 'akulaku'],
+    ['kredivo', 'kredivo'],
+    ['echannel', 'echannel'],
+    ['convenienceStore', 'cstore'],
+    ['gopay', 'gopay'],
+]);
+
+it('throws when the server key is missing', function () {
+    config()->set('midtrans.server_key', '');
+
+    Midtrans::getTransactionStatus('order-1');
+})->throws(InvalidConfigurationException::class);
+
+it('throws a MidtransApiException with validation details', function () {
+    Http::fake([
+        'https://api.sandbox.midtrans.com/v2/charge' => Http::response([
+            'status_code' => '400',
+            'status_message' => 'One or more parameters in the payload is invalid.',
+            'validation_messages' => [
+                'transaction_details.order_id is required',
+            ],
+        ], 400),
+    ]);
+
+    try {
+        Midtrans::qris()->charge([
+            'transaction_details' => [
+                'gross_amount' => 10000,
+            ],
+        ]);
+        $this->fail('Expected MidtransApiException was not thrown.');
+    } catch (MidtransApiException $exception) {
+        expect($exception->statusCode())->toBe('400')
+            ->and($exception->getMessage())->toContain('parameters')
+            ->and($exception->validationMessages())->toContain('transaction_details.order_id is required')
+            ->and($exception->httpStatus())->toBe(400)
+            ->and($exception->responseBody()['status_code'])->toBe('400');
+    }
 });

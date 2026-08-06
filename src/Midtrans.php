@@ -86,4 +86,39 @@ class Midtrans
     {
         return new Gopay;
     }
+
+    public function bankTransfer()
+    {
+        return new BankTransfer;
+    }
+
+    public function echannel()
+    {
+        return new Echannel;
+    }
+
+    public function shopeePay()
+    {
+        return new ShopeePay;
+    }
+
+    public function qris()
+    {
+        return new Qris;
+    }
+
+    public function akulaku()
+    {
+        return new Akulaku;
+    }
+
+    public function kredivo()
+    {
+        return new Kredivo;
+    }
+
+    public function convenienceStore()
+    {
+        return new ConvenienceStore;
+    }
 }

@@ -2,6 +2,9 @@
 
 namespace BlissJaspis\Midtrans\Supports;
 
+use BlissJaspis\Midtrans\Exceptions\InvalidConfigurationException;
+use BlissJaspis\Midtrans\Exceptions\MidtransApiException;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 
 class HttpRequest
@@ -22,27 +25,40 @@ class HttpRequest
 
     public function __construct()
     {
-        $this->serverKey = config('midtrans.server_key');
+        $this->serverKey = (string) config('midtrans.server_key', '');
         $this->baseUrl = $this->linkEnv[config('midtrans.is_production') ? 'production' : 'sandbox'];
+
+        if ($this->serverKey === '') {
+            throw new InvalidConfigurationException(
+                'Midtrans server key is not configured. Set MIDTRANS_SERVER_KEY in your environment.'
+            );
+        }
     }
 
     private function make(string $method, string $path, array $data = [], string $version = 'v2')
     {
+        $timeout = (int) config('midtrans.timeout', 10);
+        $connectTimeout = (int) config('midtrans.connect_timeout', 10);
+
         $request = Http::baseUrl($this->baseUrl.'/'.$version)
             ->withToken(base64_encode($this->serverKey.':'), 'Basic')
             ->withHeaders($this->headers)
-            ->timeout(10)
-            ->connectTimeout(10);
+            ->timeout($timeout)
+            ->connectTimeout($connectTimeout);
 
-        $response = match (strtoupper($method)) {
-            'GET' => $request->get($path, $data),
-            'PUT' => $request->put($path, $data),
-            'PATCH' => $request->patch($path, $data),
-            'DELETE' => $request->delete($path, $data),
-            default => $request->post($path, $data),
-        };
+        try {
+            $response = match (strtoupper($method)) {
+                'GET' => $request->get($path, $data),
+                'PUT' => $request->put($path, $data),
+                'PATCH' => $request->patch($path, $data),
+                'DELETE' => $request->delete($path, $data),
+                default => $request->post($path, $data),
+            };
 
-        return $response->throw()->json();
+            return $response->throw()->json();
+        } catch (RequestException $exception) {
+            throw MidtransApiException::fromResponse($exception->response, $exception);
+        }
     }
 
     public static function sendRequest(string $method, string $path, array $data = [], string $version = 'v2')

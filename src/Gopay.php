@@ -4,11 +4,17 @@ namespace BlissJaspis\Midtrans;
 
 use BlissJaspis\Midtrans\Supports\HttpRequest;
 use BlissJaspis\Midtrans\Traits\Base;
+use BlissJaspis\Midtrans\Traits\ChargesWithPaymentType;
 use BlissJaspis\Midtrans\Traits\HasSubscription;
 
 class Gopay
 {
-    use Base, HasSubscription;
+    use Base, ChargesWithPaymentType, HasSubscription;
+
+    protected function paymentType(): string
+    {
+        return 'gopay';
+    }
 
     public function createPayAccount(array $params)
     {

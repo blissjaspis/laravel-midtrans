@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2026-08-06
+
+### Added
+- Added payment helpers for bank transfer, echannel, ShopeePay, QRIS, Akulaku, Kredivo, and convenience store
+- Added `MidtransApiException` with Midtrans status/validation details
+- Added `InvalidConfigurationException` when the server key is missing
+- Added configurable `timeout` and `connect_timeout` settings
+- Added PCI guidance for client-side card tokenization in the README
+
+### Changed
+- GoPay now also exposes `charge()` which sets `payment_type` automatically
+
 ## [2.1.0] - 2026-08-06
 
 ### Added
