@@ -2,7 +2,7 @@
     "name": "blissjaspis/laravel-midtrans",
     "description": "Laravel Midtrans",
     "type": "library",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "require": {
         "php": "^8.2",
         "guzzlehttp/guzzle": "^7.9",
